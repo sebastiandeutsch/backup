@@ -115,7 +115,8 @@ module Backup
               { 'RSync' => ['Push', 'Pull', 'Local'] }
             ],
             # Notifiers
-            ['Mail', 'Twitter', 'Campfire', 'Prowl', 'Hipchat', 'Pushover']
+            ['Mail', 'Twitter', 'Campfire', 'Prowl',
+             'Hipchat', 'Pushover', 'HttpPost']
           ]
         )
       end
