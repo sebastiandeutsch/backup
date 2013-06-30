@@ -12,6 +12,10 @@ module Backup
       attr_accessor :access_key_id, :secret_access_key
 
       ##
+      # Host of the Amazon API
+      attr_accessor :host
+
+      ##
       # Amazon S3 bucket name
       attr_accessor :bucket
 
@@ -84,11 +88,13 @@ module Backup
         super
         instance_eval(&block) if block_given?
 
+        @host           ||= 's3.amazonaws.com'
         @chunk_size     ||= 5 # MiB
         @max_retries    ||= 10
         @retry_waitsec  ||= 30
         @path           ||= 'backups'
         @storage_class  ||= :standard
+
         path.sub!(/^\//, '')
       end
 
@@ -98,6 +104,7 @@ module Backup
         @connection ||= begin
           conn = Fog::Storage.new(
             :provider               => 'AWS',
+            :host                   => host,
             :aws_access_key_id      => access_key_id,
             :aws_secret_access_key  => secret_access_key,
             :region                 => region
