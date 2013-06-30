@@ -79,7 +79,6 @@ describe Storage::S3 do
     it 'creates a new connection' do
       Fog::Storage.expects(:new).with(
         :provider               => 'AWS',
-        :host                   => 's3.amazonaws.com',
         :aws_access_key_id      => 'my_access_key_id',
         :aws_secret_access_key  => 'my_secret_access_key',
         :region                 => 'my_region'

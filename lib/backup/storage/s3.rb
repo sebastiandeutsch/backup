@@ -88,7 +88,6 @@ module Backup
         super
         instance_eval(&block) if block_given?
 
-        @host           ||= 's3.amazonaws.com'
         @chunk_size     ||= 5 # MiB
         @max_retries    ||= 10
         @retry_waitsec  ||= 30
@@ -102,13 +101,15 @@ module Backup
 
       def connection
         @connection ||= begin
-          conn = Fog::Storage.new(
+          params = {
             :provider               => 'AWS',
-            :host                   => host,
             :aws_access_key_id      => access_key_id,
-            :aws_secret_access_key  => secret_access_key,
-            :region                 => region
-          )
+            :aws_secret_access_key  => secret_access_key
+          }
+          params[:host]   = host unless host.nil?
+          params[:region] = region unless region.nil?
+
+          conn = Fog::Storage.new(params)
           conn.sync_clock
           conn
         end
